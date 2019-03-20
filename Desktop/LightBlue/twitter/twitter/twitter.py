@@ -1,5 +1,6 @@
 from requests_oauthlib import OAuth1Session
 import json
+import time
 import datetime, time, sys
 from abc import ABCMeta, abstractmethod
  
@@ -54,7 +55,8 @@ class TweetsGetter(object):
         #----------------
         cnt = 0
         unavailableCnt = 0
-        while True:
+#        while True:
+        for i in range(950):
             res = self.session.get(url, params = params)
             if res.status_code == 503:
                 # 503 : Service Unavailable
@@ -112,7 +114,8 @@ class TweetsGetter(object):
         回数制限を問合せ、アクセス可能になるまで wait する
         '''
         unavailableCnt = 0
-        while True:
+#        while True:
+        for i in range(950):
             url = "https://api.twitter.com/1.1/application/rate_limit_status.json"
             res = self.session.get(url)
  
@@ -193,7 +196,6 @@ class TweetsGetterBySearch(TweetsGetter):
  
         return int(remaining), int(reset)
     
- 
 class TweetsGetterByUser(TweetsGetter):
     '''
     ユーザーを指定してツイートを取得
@@ -229,18 +231,28 @@ class TweetsGetterByUser(TweetsGetter):
  
         return int(remaining), int(reset)
  
- 
-if __name__ == '__main__':
- 
-    # キーワードで取得
-    getter = TweetsGetter.bySearch(u'渋谷')
     
-    # ユーザーを指定して取得 （screen_name）
-    #getter = TweetsGetter.byUser('AbeShinzo')
+# if __name__ == '__main__':
  
-    cnt = 0
-    for tweet in getter.collect(total = 3000):
-        cnt += 1
-        print ('------ %d' % cnt)
-        print ('{} {} {}'.format(tweet['id'], tweet['created_at'], '@'+tweet['user']['screen_name']))
-        print (tweet['text'])
+#     # キーワードで取得
+#     getter = TweetsGetter.bySearch(u'渋谷')
+    
+#     # ユーザーを指定して取得 （screen_name）
+#     #getter = TweetsGetter.byUser('AbeShinzo')
+ 
+#     cnt = 0
+#     for tweet in getter.collect(total = 3000):
+#         cnt += 1
+#         print ('------ %d' % cnt)
+#         print ('{} {} {}'.format(tweet['id'], tweet['created_at'], '@'+tweet['user']['screen_name']))
+#         print (tweet['text'])
+
+#######実行######
+tweet_list = []
+while True:
+    small_tweet_list = []
+    for tweet in getter.collect(total = 1000000):
+        cnt += 1s
+        tweet_list.append(tweet['text'])
+        small_tweet_list.append(tweet['text'])
+    time.sleep(900)
